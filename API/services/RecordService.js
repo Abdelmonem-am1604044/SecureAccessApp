@@ -1,12 +1,22 @@
 const RecordRepository = require('../repositories/RecordRepository');
 
 class RecordService {
-	async addLog(req, res) {
+	
+	async addRecord(req, res) {
 		try {
-			const log = RecordRepository.addLog(req.body);
+			const log = RecordRepository.addRecord(req.body);
 			res.status(201).json(log);
 		} catch (error) {
-			res.status(500).send(err);
+			res.status(500).send(error);
+		}
+	}
+
+	async getRecords(req, res) {
+		try {
+			const records = await RecordRepository.getRecords();
+			res.status(201).json(records);
+		} catch (error) {
+			res.status(500).send(error);
 		}
 	}
 }

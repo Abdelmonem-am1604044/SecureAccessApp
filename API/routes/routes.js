@@ -1,6 +1,8 @@
-const LogService = require('../services/RecordService');
-const router = require('express').Router();
+const router = require('express').Router(),
+	RecordService = require('../services/RecordService'),
+	UserService = require('../services/UserService');
 
-router.post('/record', LogService.addLog);
+router.route('/records').post(RecordService.addRecord).get(RecordService.getRecords);
+router.route('/auth').post(UserService.register).delete(UserService.removeUser).get(UserService.login);
 
 module.exports = router;

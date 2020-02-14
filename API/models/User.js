@@ -1,15 +1,10 @@
-import { Schema, model } from 'mongoose';
-
-const UserSchema = Schema({
-	given_name: {
+const mongoose = require('mongoose');
+const UserSchema = mongoose.Schema({
+	username: {
 		type: String,
 		required: true,
-		trim: true
-	},
-	family_name: {
-		type: String,
-		required: true,
-		trim: true
+		trim: true,
+		unique: true
 	},
 	password: {
 		type: String,
@@ -20,11 +15,15 @@ const UserSchema = Schema({
 		type: String,
 		required: true,
 		trim: true,
-		enum: ['employee','admin']
+		enum: [ 'Employee', 'Admin' ]
 	},
-	status: {}
+	status: {
+		type: String,
+		default: 'Unlocked',
+		enum: [ 'Unlocked', 'Unlocked' ]
+	}
 });
 
-const User = model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const RecordSchema = mongoose.Schema({
 	user: {
 		type: String
@@ -8,6 +9,10 @@ const RecordSchema = mongoose.Schema({
 		required: true
 	},
 	status: {
+		type: String,
+		required: true
+	},
+	type: {
 		type: String,
 		required: true
 	}

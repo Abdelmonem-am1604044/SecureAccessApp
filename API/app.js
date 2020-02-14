@@ -14,7 +14,8 @@ app.use('/api', routes);
 
 const dbConnection = mongoose
 	.connect('mongodb://localhost:27017/SecureAccess', {
-		useNewUrlParser: true
+		useNewUrlParser: true,
+		useUnifiedTopology: true
 	})
 	.then(() => {
 		app.listen(port, () => {
