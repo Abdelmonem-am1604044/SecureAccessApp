@@ -1,0 +1,25 @@
+<%- include('partials/header.ejs') %> 
+
+<div class="container">
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Date and Time</th>
+            <th scope="col">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+         <% records.forEach(record => { %>
+            <tr>
+                <td><%= record.user.username %></td>
+                <td><%= record.user._id %></td>
+                <td><%= record.dateAndTime %></td>
+                <td><%= record.type %></td>
+            </tr> 
+        <% }) %> 
+      </table>
+</div>
+
+<%- include('partials/footer.ejs') %> 

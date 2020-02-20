@@ -1,0 +1,43 @@
+{
+	"name": "secureaccessapp",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"dependencies": {
+		"bcrypt": "^3.0.8",
+		"cors": "^2.8.5",
+		"ejs": "^3.0.1",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"jwt-decode": "^2.2.0",
+		"mongoose": "^5.9.1",
+		"morgan": "^1.9.1",
+		"path": "^0.12.7",
+		"passport": "^0.4.0",
+		"passport-local": "^1.0.0",
+		"passport-local-mongoose": "^5.0.1",
+		"connect-flash": "^0.1.1",
+		"cookie-parser": "~1.4.3",
+		"debug": "~2.6.9",
+		"express-session": "^1.15.6",
+		"http-errors": "~1.6.2",
+		"method-override": "^3.0.0"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"client": "parcel client/src/index.html",
+		"jump": "parcel client/src/index.html",
+		"build": "parcel build client/src/index.html --public-url ./"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Abdelmonem-am1604044/SecureAccessApp.git"
+	},
+	"author": "Abdelmonem Mohamed",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Abdelmonem-am1604044/SecureAccessApp/issues"
+	},
+	"homepage": "https://github.com/Abdelmonem-am1604044/SecureAccessApp#readme"
+}

@@ -1,5 +1,4 @@
-import { Door } from '../models/Door';
-
+const Door = require('../models/Door');
 class DoorRepository {
 	async addDoor(door) {
 		return await new Door(door).save();

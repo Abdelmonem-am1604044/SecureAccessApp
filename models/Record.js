@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const RecordSchema = mongoose.Schema({
 	user: {
-		type: String
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
 	},
 	dateAndTime: {
 		type: String,
