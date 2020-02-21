@@ -8,7 +8,9 @@ const express = require('express'),
 	User = require('./models/User'),
 	methodOverride = require('method-override'),
 	indexRouter = require('./routes/index'),
-	recordsRouter = require('./routes/records');
+	recordsRouter = require('./routes/records'),
+	UserRouter = require('./routes/user'),
+	DoorRouter = require('./routes/door');
 
 app.set('view engine', 'ejs');
 mongoose.connect('mongodb://localhost:27017/SecureAccess', {
@@ -44,6 +46,9 @@ app.use(function(req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/records', recordsRouter);
+app.use('/door', DoorRouter);
+app.use('/user', UserRouter);
+
 // Server Startup
 app.listen(5000, function() {
 	console.log('http://localhost:5000');

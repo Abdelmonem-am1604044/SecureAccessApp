@@ -1,0 +1,21 @@
+<%- include('../partials/header.ejs') %> 
+
+<div class="container">
+    <table class="table shadow-lg p-3 mb-5 bg-white rounded">
+        <thead>
+        <tr>
+            <th scope="col">Access Point ID</th>
+            <th scope="col">Access Point Name</th>
+        </tr>
+        </thead>
+        <tbody>
+            <% doors.forEach(door => { %>
+                <tr>
+                    <td><%= door._id %></td>
+                    <td><%= door.doorName %></td>
+                </tr> 
+            <% }) %> 
+    </table>
+</div>
+
+<%- include('../partials/footer.ejs') %> 

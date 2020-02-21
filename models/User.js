@@ -23,8 +23,14 @@ const UserSchema = mongoose.Schema({
 	status: {
 		type: String,
 		default: 'Unlocked',
-		enum: [ 'Unlocked', 'Unlocked' ]
-	}
+		enum: [ 'Unlocked', 'Locked' ]
+	},
+	allowedDoors: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Door'
+		}
+	]
 });
 
 UserSchema.plugin(passportLocalMongoose);

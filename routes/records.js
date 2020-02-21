@@ -3,9 +3,11 @@ const express = require('express'),
 	Record = require('../models/Record');
 
 router.get('/show', async (req, res) => {
-	let records = await Record.find({}).populate('user');
-	console.log(records);
-	res.render('records', { records, currentUser: req.user });
+	let records;
+	if (req.user.role == 'Employee') {
+		records = await Record.find({ user: req.user._id }).populate('user');
+	} else records = await Record.find().populate('user');
+	res.render('records/show', { records, currentUser: req.user });
 });
 
 module.exports = router;

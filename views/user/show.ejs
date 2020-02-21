@@ -1,0 +1,46 @@
+<%- include('../partials/header.ejs') %> 
+
+<div class="container">
+    <table class="table table shadow-lg p-3 mb-5 bg-white rounded">
+        <thead>
+            <tr>
+            <th scope="col">User ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">User Role</th>
+            <th scope="col">User Account Status</th>
+            <th scope="col">Allowed Access Point</th>
+            <th scope="col">Assign Access Point</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user._id %></td>
+                    <td><%= user.username %></td>
+                    <td><%= user.role %></td>
+                    <td><%= user.status %></td>
+                    <td>
+                        <% user.allowedDoors.forEach(door => { %>
+                            <p>gg</p>
+                        <% }) %> 
+                    </td>
+                    <td>
+                        <form action="" method="POST">
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Assign
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <% doors.forEach(door => { %> 
+                                        <a class="dropdown-item" href="#"><%= door.doorName %> </a>
+                                    <% }) %> 
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr> 
+            <% }) %> 
+        </table>
+</div>
+
+<%- include('../partials/footer.ejs') %> 

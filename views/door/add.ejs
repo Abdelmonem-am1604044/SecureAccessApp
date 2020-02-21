@@ -1,0 +1,15 @@
+<%- include('../partials/header.ejs') %> 
+
+<div class="container">
+    <h1>Add Access Point</h1>
+    <form action="/door/add" method="POST">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Access Point Name</label>
+            <input type="text" name='doorName' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </form>
+</div>
+
+<%- include('../partials/footer.ejs') %> 

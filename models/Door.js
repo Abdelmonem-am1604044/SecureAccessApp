@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
 
 const DoorSchema = mongoose.Schema({
-	DoorId: {
+	doorName: {
 		type: String,
-		required: true
-	},
-	DoorRole: {
-		type: String,
-		required: true
+		required: true,
+		unique: true
 	}
 });
 
