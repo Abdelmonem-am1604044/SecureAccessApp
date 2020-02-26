@@ -1,15 +1,19 @@
 <%- include('../partials/header.ejs') %> 
 
-<div class="container">
-    <table class="table table shadow-lg p-3 mb-5 bg-white rounded">
+<div class="container p-1">
+    <a href="/user/new">
+        <button type="button" class="btn btn-outline-primary">Add New User</button>
+    </a>
+    <table class="table table shadow-lg p-3 mb-5 mt-2 bg-white rounded">
         <thead>
             <tr>
             <th scope="col">User ID</th>
             <th scope="col">Username</th>
             <th scope="col">User Role</th>
             <th scope="col">User Account Status</th>
-            <th scope="col">Allowed Access Point</th>
-            <th scope="col">Assign Access Point</th>
+            <th scope="col">Allowed Access Points</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +25,17 @@
                     <td><%= user.status %></td>
                     <td>
                         <% user.allowedDoors.forEach(door => { %>
-                            <p>gg</p>
+                            <p><%= door.doorName %> </p>
                         <% }) %> 
                     </td>
                     <td>
-                        <form action="" method="POST">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="submit" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Assign
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <% doors.forEach(door => { %> 
-                                        <a class="dropdown-item" href="#"><%= door.doorName %> </a>
-                                    <% }) %> 
-                                </div>
-                            </div>
+                        <a href="/user/<%= user._id %> ">
+                            <button type="button" class="btn btn-outline-success">Update User </button>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/user/delete/<%= user._id %>" method="POST">
+                            <button class="btn btn-outline-danger">Remove User</button>
                         </form>
                     </td>
                 </tr> 

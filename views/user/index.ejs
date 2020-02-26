@@ -1,0 +1,64 @@
+<%- include('../partials/header.ejs') %>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Manage <b><%= user.username %></b> Account</h1>
+        <hr>
+        <form action="/user/<%= user._id %> " method="POST">
+            <div class="form-group">
+                <label for="inputEmail4">Username:</label>
+                <input type="text" name='username' value='<%= user.username %>' class="form-control" id="inputEmail4">
+            </div>
+            <hr>
+            <div class="form-group">
+                <legend class="col-form-label">Role:</legend>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="gridRadios1" value="Employee" <% if(user.role == 'Employee'){ %>checked <% } %> >
+                    <label class="form-check-label" for="gridRadios1">
+                        Employee
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="role" id="gridRadios1" value="Admin" <% if(user.role == 'Admin'){ %>checked <% } %>>
+                    <label class="form-check-label" for="gridRadios1">
+                        Admin
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <legend class="col-form-label">Account Status:</legend>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="status" id="gridRadios1" value="Unlocked" <% if(user.status == 'Unlocked'){ %>checked <% } %> >
+                    <label class="form-check-label" for="gridRadios1">
+                        Unlocked
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="gridRadios1" value="Locked" <% if(user.status == 'Locked'){ %>checked <% } %>>
+                    <label class="form-check-label" for="gridRadios1">
+                        Locked
+                    </label>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <legend class="col-form-label">Access Points:</legend>
+                <% doors.forEach(door => { %>
+                    <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="doorName" id="doorName" value="<%=door._id%>" <% user.allowedDoors.forEach(d => { %>
+                        <% if(d.doorName == door.doorName) { %>
+                            checked
+                    <% }}) %> >
+                        <label class="form-check-label" for="doorName">
+                            <%= door.doorName %> 
+                        </label>
+                    </div>
+                <% }) %>
+                <button type="submit" class="btn btn-primary mt-5">Update User</button> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../partials/footer.ejs') %> 

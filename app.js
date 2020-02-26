@@ -13,11 +13,22 @@ const express = require('express'),
 	DoorRouter = require('./routes/door');
 
 app.set('view engine', 'ejs');
-mongoose.connect('mongodb://localhost:27017/SecureAccess', {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useCreateIndex: true
-});
+mongoose
+	.connect('mongodb://localhost:27017/SecureAccess', {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true
+	})
+	.then(() => {
+		mongoose.connection.db.collection('users').countDocuments().then(async (count) => {
+			if (count == 0) {
+				let newUser = new User({ username: 'admin', role: 'Admin' });
+				User.register(newUser, '123', (err, user) => {
+					passport.authenticate('local');
+				});
+			}
+		});
+	});
 
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
