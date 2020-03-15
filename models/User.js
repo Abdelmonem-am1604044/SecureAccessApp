@@ -8,6 +8,12 @@ const UserSchema = mongoose.Schema({
 		trim: true,
 		unique: true
 	},
+	RFID: {
+		type: String,
+		required: true,
+		trim: true,
+		unique: true
+	},
 	password: {
 		type: String,
 		required: false,

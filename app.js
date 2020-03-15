@@ -10,11 +10,12 @@ const express = require('express'),
 	indexRouter = require('./routes/index'),
 	recordsRouter = require('./routes/records'),
 	UserRouter = require('./routes/user'),
+	APIRouter = require('./routes/api'),
 	DoorRouter = require('./routes/door');
 
 app.set('view engine', 'ejs');
 mongoose
-	.connect('mongodb://localhost:27017/SecureAccess', {
+	.connect('mongodb+srv://secure:SecureAccess@cluster0-tfx51.mongodb.net/test?retryWrites=true&w=majority', {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true
@@ -22,7 +23,7 @@ mongoose
 	.then(() => {
 		mongoose.connection.db.collection('users').countDocuments().then(async (count) => {
 			if (count == 0) {
-				let newUser = new User({ username: 'admin', role: 'Admin' });
+				let newUser = new User({ username: 'admin', role: 'Admin', RFID: '123' });
 				User.register(newUser, '123', (err, user) => {
 					passport.authenticate('local');
 				});
@@ -59,6 +60,7 @@ app.use('/', indexRouter);
 app.use('/records', recordsRouter);
 app.use('/door', DoorRouter);
 app.use('/user', UserRouter);
+app.use('/api', APIRouter);
 
 // Server Startup
 app.listen(5000, function() {

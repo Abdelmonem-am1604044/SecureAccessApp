@@ -5,6 +5,11 @@ const DoorSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+	doorID: {
+		type: String,
+		required: true,
+		unique: true
 	}
 });
 

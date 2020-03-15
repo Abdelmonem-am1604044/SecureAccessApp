@@ -24,8 +24,35 @@ router.post('/add', async (req, res) => {
 });
 
 router.get('/show', async (req, res) => {
-    let doors = await Door.find({});
-	res.render('door/show', {doors});
+	let doors = await Door.find({});
+	res.render('door/show', { doors });
+});
+
+router.get('/:id', async (req, res) => {
+	let door = await Door.findOne({ _id: req.params.id });
+	res.render('door/index', { door });
+});
+
+router.post('/:id', async (req, res) => {
+	let door = await Door.findOneAndUpdate({ _id: req.params.id }, req.body);
+	await new Record({
+		user: req.user._id,
+		dateAndTime: dateTime,
+		status: 'Completed',
+		type: `Access Point Information Updated \'${door.doorName}\'`
+	}).save();
+	res.redirect('/door/show');
+});
+
+router.post('/delete/:id', async (req, res) => {
+	let door = await Door.findOneAndDelete({ _id: req.params.id });
+	await new Record({
+		user: req.user._id,
+		dateAndTime: dateTime,
+		status: 'Completed',
+		type: `Access Point Information Deleted \'${door.doorName}\'`
+	}).save();
+	res.redirect('/door/show');
 });
 
 module.exports = router;

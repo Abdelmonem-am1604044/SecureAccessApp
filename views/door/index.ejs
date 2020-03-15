@@ -1,15 +1,14 @@
 <%- include('../partials/header.ejs') %> 
 
 <div class="container">
-    <h1>Add Access Point</h1>
-    <form action="/door/add" method="POST">
+    <form action="/door/<%= door._id %> " method="POST">
         <div class="form-group">
             <label for="exampleInputEmail1">Access Point Name:</label>
-            <input type="text" name='doorName' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" name='doorName' class="form-control" id="exampleInputEmail1" value="<%= door.doorName %> " aria-describedby="emailHelp">
         </div>
         <div class="form-group">
             <label for="exampleInputEmail1">Access Point ID:</label>
-            <input type="text" name='doorID' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="text" name='doorID' class="form-control" id="exampleInputEmail1" value="<%= door.doorID %> " aria-describedby="emailHelp">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         </form>

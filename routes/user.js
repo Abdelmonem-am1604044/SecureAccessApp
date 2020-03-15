@@ -10,6 +10,33 @@ var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getD
 var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 var dateTime = date + ' ' + time;
 
+router
+	.route('/new')
+	.get(async (req, res) => {
+		let doors = await Door.find({});
+		res.render('user/new', { doors });
+	})
+	.post(async (req, res) => {
+		let allowedDoors = [];
+		if (typeof doors == 'string') {
+			allowedDoors.push(doors);
+		} else if (typeof doors == 'object') {
+			doors.forEach((door) => {
+				door = door.trim();
+				allowedDoors.push(door);
+			});
+		}
+		let { username, password, RFID, role } = req.body;
+		let user = await new User({ username, password, RFID, role, allowedDoors }).save();
+		await new Record({
+			user: req.user._id,
+			dateAndTime: dateTime,
+			status: 'Completed',
+			type: `New Account Added \'${user.username}\'`
+		}).save();
+		res.redirect('/user/show');
+	});
+
 router.get('/show', async (req, res) => {
 	let users = await User.find({}).populate('allowedDoors');
 	let doors = await Door.find({});
@@ -54,9 +81,5 @@ router.post('/delete/:id', async (req, res) => {
 	}).save();
 	res.redirect('/user/show');
 });
-
-router.route('/new').get((req,res) => {
-	res.render('user/new')
-})
 
 module.exports = router;

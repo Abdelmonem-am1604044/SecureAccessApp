@@ -9,13 +9,25 @@
         <tr>
             <th scope="col">Access Point ID</th>
             <th scope="col">Access Point Name</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
             <% doors.forEach(door => { %>
                 <tr>
-                    <td><%= door._id %></td>
+                    <td><%= door.doorID %></td>
                     <td><%= door.doorName %></td>
+                    <td>
+                        <a href="/door/<%= door._id %> ">
+                            <button type="button" class="btn btn-outline-success">Update Access Point </button>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/door/delete/<%= door._id %>" method="POST">
+                            <button class="btn btn-outline-danger">Remove Access Point</button>
+                        </form>
+                    </td>
                 </tr> 
             <% }) %> 
     </table>
