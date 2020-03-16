@@ -25,10 +25,7 @@
 	},
 	"devDependencies": {},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"client": "parcel client/src/index.html",
-		"jump": "parcel client/src/index.html",
-		"build": "parcel build client/src/index.html --public-url ./"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
 		"type": "git",
