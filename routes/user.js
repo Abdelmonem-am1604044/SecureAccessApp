@@ -3,6 +3,7 @@ const express = require('express'),
 	User = require('../models/User'),
 	Door = require('../models/Door'),
 	ObjectId = require('mongodb').ObjectId,
+	passport = require('passport'),
 	Record = require('../models/Record');
 
 var today = new Date();
@@ -27,7 +28,15 @@ router
 			});
 		}
 		let { username, password, RFID, role } = req.body;
-		let user = await new User({ username, password, RFID, role, allowedDoors }).save();
+		let newUser = await new User({ username, RFID, role, allowedDoors });
+		User.register(newUser, password, (err, user) => {
+			if (err) {
+				req.flash('error', err.message);
+				return res.redirect('/user/new');
+			}
+			req.flash('success', `New User Added: ${user.username}`);
+			res.redirect('/user/show');
+		});
 		await new Record({
 			user: req.user._id,
 			dateAndTime: dateTime,

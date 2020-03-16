@@ -12,6 +12,7 @@ const express = require('express'),
 	UserRouter = require('./routes/user'),
 	APIRouter = require('./routes/api'),
 	DoorRouter = require('./routes/door');
+const port = process.env.PORT || 5000;
 
 app.set('view engine', 'ejs');
 mongoose
@@ -63,6 +64,6 @@ app.use('/user', UserRouter);
 app.use('/api', APIRouter);
 
 // Server Startup
-app.listen(5000, function() {
+app.listen(port, function() {
 	console.log('http://localhost:5000');
 });
