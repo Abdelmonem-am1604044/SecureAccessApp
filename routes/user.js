@@ -22,7 +22,7 @@ router
 		if (typeof doors == 'string') {
 			allowedDoors.push(doors);
 		} else if (typeof doors == 'object') {
-			doors.forEach((door) => {
+			doors.forEach((door) => {5:30 PM
 				door = door.trim();
 				allowedDoors.push(door);
 			});

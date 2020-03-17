@@ -7,7 +7,11 @@ const express = require('express'),
 	passport = require('passport');
 
 router.get('/confirm', async (req, res) => {
+
+
 	let m = await User.findOne({ RFID: req.query.RFID }).populate('allowedDoors');
+
+
 	if (m) {
 		if (m.status == 'Unlocked') {
 			passport.authenticate('local', function(err, user, info) {
