@@ -4,9 +4,11 @@
     <div class="jumbotron">
         <h1>Welcome To Secure Access App!!!</h1>
         <p>Where All your Access Points Are Secured</p>
-        <p>
-            <a class="btn btn-lg btn-primary" href="/records/show">View Records</a>
-        </p>
+        <% if(user){ %>
+            <p>
+                <a class="btn btn-lg btn-primary" href="/records/show">View Records</a>
+            </p>
+        <% } %>  
     </div>
 </header>
 

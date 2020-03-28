@@ -1,7 +1,20 @@
+/**
+ * 
+ * a file responsible for all the routes related to /records
+ * 
+ */
+
 const express = require('express'),
 	router = express.Router(),
 	Record = require('../models/Record');
 
+/**
+ * 
+ * a function for the the route '/records/show'
+ * 
+ * retrieve all records, and filter them according to the signed in user, and then send them to the view to show them
+ * 
+ */
 router.get('/show', async (req, res) => {
 	let records;
 	if (req.user.role == 'Employee') {

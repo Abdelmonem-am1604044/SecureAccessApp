@@ -1,3 +1,9 @@
+/**
+ * 
+ * A file responsible for all the related routes of /door
+ * 
+ */
+
 const express = require('express'),
 	router = express.Router(),
 	Door = require('../models/Door'),
@@ -8,10 +14,12 @@ var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getD
 var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 var dateTime = date + ' ' + time;
 
+// function for showing the add access point view
 router.get('/add', (req, res) => {
 	res.render('door/add');
 });
 
+// function to add new Door to the database, and add new record
 router.post('/add', async (req, res) => {
 	await new Door(req.body).save();
 	await new Record({
@@ -23,16 +31,19 @@ router.post('/add', async (req, res) => {
 	res.redirect('/door/show');
 });
 
+// function to show the list of access points
 router.get('/show', async (req, res) => {
 	let doors = await Door.find({});
 	res.render('door/show', { doors });
 });
 
+// function to show a specific access point
 router.get('/:id', async (req, res) => {
 	let door = await Door.findOne({ _id: req.params.id });
 	res.render('door/index', { door });
 });
 
+// function to update the information of a specific access point, and add new record
 router.post('/:id', async (req, res) => {
 	let door = await Door.findOneAndUpdate({ _id: req.params.id }, req.body);
 	await new Record({
@@ -44,6 +55,7 @@ router.post('/:id', async (req, res) => {
 	res.redirect('/door/show');
 });
 
+// function to delete the information of a specific access point, and add new record
 router.post('/delete/:id', async (req, res) => {
 	let door = await Door.findOneAndDelete({ _id: req.params.id });
 	await new Record({

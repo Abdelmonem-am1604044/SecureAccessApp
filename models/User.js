@@ -31,6 +31,10 @@ const UserSchema = mongoose.Schema({
 		default: 'Unlocked',
 		enum: [ 'Unlocked', 'Locked' ]
 	},
+	trials: {
+		type: Number,
+		default: 0
+	},
 	allowedDoors: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
