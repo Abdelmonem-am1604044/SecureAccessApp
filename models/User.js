@@ -19,6 +19,11 @@ const UserSchema = mongoose.Schema({
 		required: false,
 		trim: true
 	},
+	pin: {
+		type: String,
+		required: false,
+		trim: true
+	},
 	role: {
 		type: String,
 		required: true,

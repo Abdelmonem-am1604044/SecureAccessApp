@@ -8,6 +8,7 @@ const express = require('express'),
 	router = express.Router(),
 	User = require('../models/User'),
 	Door = require('../models/Door'),
+	bcrypt = require('bcryptjs'),
 	Record = require('../models/Record');
 
 // get current date and time
@@ -37,9 +38,11 @@ router
 			});
 		}
 		// get the rest of the information from the form, like username, password, etc.
-		let { username, password, RFID, role } = req.body;
+		let { username, password, RFID, pin, role } = req.body;
+		const salt = await bcrypt.genSalt(10);
+		pin = await bcrypt.hash(pin, salt);
 		// add the new user to the database, with the information passed from the form
-		let newUser = await new User({ username, RFID, role, allowedDoors });
+		let newUser = await new User({ username, RFID, role, pin, allowedDoors });
 		// convert the password stored in the database to hash and salt, to prevent from hacking, using a predefined function
 		User.register(newUser, password, (err, user) => {
 			if (err) {

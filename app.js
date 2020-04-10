@@ -11,6 +11,7 @@ const express = require('express'),
 	recordsRouter = require('./routes/records'),
 	UserRouter = require('./routes/user'),
 	APIRouter = require('./routes/api'),
+	bcrypt = require('bcryptjs'),
 	DoorRouter = require('./routes/door');
 
 const port = process.env.PORT || 5000;
@@ -25,7 +26,9 @@ mongoose
 	.then(() => {
 		mongoose.connection.db.collection('users').countDocuments().then(async (count) => {
 			if (count == 0) {
-				let newUser = new User({ username: 'admin', role: 'Admin', RFID: '123' });
+				const salt = await bcrypt.genSalt(10);
+				pin = await bcrypt.hash('123', salt);
+				let newUser = new User({ username: 'admin', role: 'Admin', RFID: '123', pin });
 				User.register(newUser, '123', (err, user) => {
 					passport.authenticate('local');
 				});
