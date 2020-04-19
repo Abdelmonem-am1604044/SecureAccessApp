@@ -26,10 +26,11 @@ var dateTime = date + ' ' + time;
 	 * 	- using only the RFID of the user
 	 * 	- using username and password of the user 
 	 *	- using username and password and rfid of the user
+	 *  - using pin number and rfid
 	 */
 router.get('/confirm', async (request, response) => {
-	// First Case: Using RFID of the user
-	if (!request.query.username && !request.query.password && request.query.RFID) {
+	// First Case: Using RFID of the user only
+	if (!request.query.username && !request.query.pin && request.query.RFID) {
 		// checking the passed RFID with the ones in database
 		let user = await User.findOne({ RFID: request.query.RFID }).populate('allowedDoors');
 		// in case there is a user with this RFID
@@ -60,7 +61,7 @@ router.get('/confirm', async (request, response) => {
 			response.json({ message: 'User with such RFID does not exist' });
 		}
 	} else if (request.query.username && request.query.pin && !request.query.RFID) {
-		// Second Case: Using username and pin of the user
+		// Second Case: Using username and pin of the user only
 
 		// retrieve a user with such username
 		let user = await User.findOne({ username: request.query.username }).populate('allowedDoors');
@@ -73,7 +74,7 @@ router.get('/confirm', async (request, response) => {
 			if (match) {
 				// In case there is a match
 				user = user.toObject();
-				// retrieve the allowed doors from the database, and compare with the passed door
+				// retrieve the allowed doors from the database, and compare with the passed doorID
 				let allowed = user.allowedDoors.find((door) => door.doorID == request.query.doorID);
 				if (allowed) {
 					// in case of success
@@ -103,7 +104,7 @@ router.get('/confirm', async (request, response) => {
 			response.json({ message: 'Username and/or Pin are Incorrect' });
 		}
 	} else if (request.query.username && request.query.pin && request.query.RFID) {
-		// Third Case: checking username and pin and rfid of the user
+		// Third Case: checking username, pin and rfid of the user
 		// checking the passed RFID with the ones in database
 		let user = await User.findOne({ RFID: request.query.RFID }).populate('allowedDoors');
 		// in case there is a user with this RFID
@@ -151,6 +152,37 @@ router.get('/confirm', async (request, response) => {
 		} else {
 			// in case there is no user with this RFID
 			response.json({ message: 'User with such RFID does not exist' });
+		}
+	} else if (!request.query.username && request.query.pin && request.query.RFID) {
+		let rfid_user = await User.findOne({ RFID: request.query.RFID }).populate('allowedDoors');
+		if (rfid_user) {
+			let match = await bcrypt.compare(request.query.pin, rfid_user.pin);
+			if (match) {
+				let allowed = rfid_user.allowedDoors.find((door) => door.doorID == request.query.doorID);
+				if (allowed) {
+					// in case of success
+					response.json({ message: 'Allowed' });
+					await new Record({
+						user: rfid_user._id,
+						dateAndTime: dateTime,
+						status: 'Completed',
+						type: `Successful Access through the access point ${allowed.doorName}`
+					}).save();
+				} else {
+					// in case of failure
+					response.json({ message: 'Not Allowed' });
+					await new Record({
+						user: rfid_user._id,
+						dateAndTime: dateTime,
+						status: 'Completed',
+						type: `Failed access through the access point ${request.query.doorID}`
+					}).save();
+				}
+			} else {
+				response.json({ message: 'RFID and/or Pin are Incorrect' });
+			}
+		} else {
+			response.json({ message: 'RFID and/or Pin are Incorrect' });
 		}
 	}
 });

@@ -39,6 +39,7 @@ router
 		}
 		// get the rest of the information from the form, like username, password, etc.
 		let { username, password, RFID, pin, role } = req.body;
+		// Convert the passed pin to hash
 		const salt = await bcrypt.genSalt(10);
 		pin = await bcrypt.hash(pin, salt);
 		// add the new user to the database, with the information passed from the form
