@@ -10,6 +10,10 @@ const DoorSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+	sensitive: {
+		type: Boolean,
+		required: true
 	}
 });
 

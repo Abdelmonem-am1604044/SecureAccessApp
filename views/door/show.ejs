@@ -9,6 +9,7 @@
         <tr>
             <th scope="col">Access Point ID</th>
             <th scope="col">Access Point Name</th>
+            <th scope="col">Sensitive</th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
@@ -18,6 +19,7 @@
                 <tr>
                     <td><%= door.doorID %></td>
                     <td><%= door.doorName %></td>
+                    <td><%= door.sensitive %></td>
                     <td>
                         <a href="/door/<%= door._id %> ">
                             <button type="button" class="btn btn-outline-success">Update Access Point </button>

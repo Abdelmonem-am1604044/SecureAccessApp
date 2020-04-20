@@ -21,7 +21,9 @@ router.get('/add', (req, res) => {
 
 // function to add new Door to the database, and add new record
 router.post('/add', async (req, res) => {
-	await new Door(req.body).save();
+	let sensitive = req.body.sensitive ? true : false;
+	let { doorName, doorID } = req.body;
+	await new Door({ doorName, doorID, sensitive }).save();
 	await new Record({
 		user: req.user._id,
 		dateAndTime: dateTime,

@@ -22,7 +22,8 @@ const UserSchema = mongoose.Schema({
 	pin: {
 		type: String,
 		required: false,
-		trim: true
+		trim: true,
+		unique: true
 	},
 	role: {
 		type: String,
