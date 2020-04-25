@@ -21,33 +21,28 @@ router
 		// function responsible confirm the username and password passed for login, and a record
 		let user = await User.findOne({ username: req.body.username });
 		if (user) {
-			if (user.status == 'Unlocked') {
-				passport.authenticate('local', function(err, user, info) {
+			passport.authenticate('local', function(err, user, info) {
+				if (err) {
+					return next(err);
+				}
+				if (!user) {
+					req.flash('error', 'Password and/or Username are Incorrect');
+					return res.redirect('/login');
+				}
+				req.logIn(user, async function(err) {
 					if (err) {
 						return next(err);
 					}
-					if (!user) {
-						req.flash('error', 'Password and/or Username are Incorrect');
-						return res.redirect('/login');
-					}
-					req.logIn(user, async function(err) {
-						if (err) {
-							return next(err);
-						}
-						req.flash('success', 'Welcome To Secure Access App ' + req.user.username);
-						await new Record({
-							user: req.user._id,
-							dateAndTime: getTime(),
-							status: 'Completed',
-							type: `User Login '${req.user.username}'`
-						}).save();
-						return res.redirect('/');
-					});
-				})(req, res, next);
-			} else {
-				req.flash('error', 'Your Account is Locked');
-				res.redirect('/login');
-			}
+					req.flash('success', 'Welcome To Secure Access App ' + req.user.username);
+					await new Record({
+						user: req.user._id,
+						dateAndTime: getTime(),
+						status: 'Completed',
+						type: `User Login '${req.user.username}'`
+					}).save();
+					return res.redirect('/');
+				});
+			})(req, res, next);
 		} else {
 			req.flash('error', 'Password and/or Username are Incorrect');
 			res.redirect('/login');

@@ -67,33 +67,51 @@ router.get('/confirm', async (request, response) => {
 			let rfid_user = await User.findOne({ RFID: request.query.RFID }).populate('allowedDoors');
 			// check if the user exists in the database
 			if (rfid_user) {
-				// compare the pin number passed to the one stored in the database
-				let match = await bcrypt.compare(request.query.pin, rfid_user.pin);
-				// check to see if there is a match
-				if (match) {
-					// incase there is a match, check the passed doorID with the allowed doors in the database
-					let allowed = rfid_user.allowedDoors.find((door) => door.doorID == request.query.doorID);
-					if (allowed) {
-						// in case of success
-						response.json('Allowed');
-						await new Record({
-							user: rfid_user._id,
-							dateAndTime: dateTime,
-							status: 'Completed',
-							type: `Successful Access through the access point ${allowed.doorName}`
-						}).save();
+				if (rfid_user.status == 'Unlocked') {
+					// compare the pin number passed to the one stored in the database
+					let match = await bcrypt.compare(request.query.pin, rfid_user.pin);
+					// check to see if there is a match
+					if (match) {
+						// incase there is a match, check the passed doorID with the allowed doors in the database
+						let allowed = rfid_user.allowedDoors.find((door) => door.doorID == request.query.doorID);
+						if (allowed) {
+							// in case of success
+							response.json('Allowed');
+							await new Record({
+								user: rfid_user._id,
+								dateAndTime: dateTime,
+								status: 'Completed',
+								type: `Successful Access through the access point ${allowed.doorName}`
+							}).save();
+						} else {
+							// in case of failure
+							response.json('Not Allowed');
+							await new Record({
+								user: rfid_user._id,
+								dateAndTime: dateTime,
+								status: 'Completed',
+								type: `Failed access through the access point ${request.query.doorID}`
+							}).save();
+						}
 					} else {
-						// in case of failure
-						response.json('Not Allowed');
-						await new Record({
-							user: rfid_user._id,
-							dateAndTime: dateTime,
-							status: 'Completed',
-							type: `Failed access through the access point ${request.query.doorID}`
-						}).save();
+						let trials = ++rfid_user.trials;
+						console.log(trials);
+						if (trials >= 3) {
+							trials = 0;
+							await User.findOneAndUpdate({ _id: rfid_user._id }, { trials, status: 'Locked' });
+							await new Record({
+								user: rfid_user._id,
+								dateAndTime: dateTime,
+								status: 'Completed',
+								type: `Account is Locked`
+							}).save();
+						} else {
+							await User.findOneAndUpdate({ _id: rfid_user._id }, { trials });
+						}
+						response.json('RFID and/or Pin are Incorrect');
 					}
 				} else {
-					response.json('RFID and/or Pin are Incorrect');
+					response.json('Account is Locked');
 				}
 			} else {
 				response.json('RFID and/or Pin are Incorrect');
@@ -110,26 +128,30 @@ router.get('/confirm', async (request, response) => {
 			let user = await User.findOne({ RFID: request.query.RFID }).populate('allowedDoors');
 			// in case there is a user with this RFID
 			if (user) {
-				// check the passed doorID with the one in the database
-				let allowed = user.allowedDoors.find((door) => door.doorID == request.query.doorID);
-				// in case of success
-				if (allowed) {
-					response.json('Allowed');
-					await new Record({
-						user: user._id,
-						dateAndTime: dateTime,
-						status: 'Completed',
-						type: `Successful Access through the access point ${allowed.doorName}`
-					}).save();
+				if (user.status == 'Unlocked') {
+					// check the passed doorID with the one in the database
+					let allowed = user.allowedDoors.find((door) => door.doorID == request.query.doorID);
+					// in case of success
+					if (allowed) {
+						response.json('Allowed');
+						await new Record({
+							user: user._id,
+							dateAndTime: dateTime,
+							status: 'Completed',
+							type: `Successful Access through the access point ${allowed.doorName}`
+						}).save();
+					} else {
+						// in case of failure
+						response.json('Not Allowed');
+						await new Record({
+							user: user._id,
+							dateAndTime: dateTime,
+							status: 'Completed',
+							type: `Failed access through the access point ${request.query.doorID}`
+						}).save();
+					}
 				} else {
-					// in case of failure
-					response.json('Not Allowed');
-					await new Record({
-						user: user._id,
-						dateAndTime: dateTime,
-						status: 'Completed',
-						type: `Failed access through the access point ${request.query.doorID}`
-					}).save();
+					response.json('Account is Locked');
 				}
 			} else {
 				response.json('Pin and/or RFID are incorrect');
