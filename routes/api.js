@@ -74,6 +74,7 @@ router.get('/confirm', async (request, response) => {
 					if (match) {
 						// incase there is a match, check the passed doorID with the allowed doors in the database
 						let allowed = rfid_user.allowedDoors.find((door) => door.doorID == request.query.doorID);
+						await User.findOneAndUpdate({ _id: rfid_user._id }, { trials: 0 });
 						if (allowed) {
 							// in case of success
 							response.json('Allowed');
@@ -165,29 +166,33 @@ router.get('/confirm', async (request, response) => {
 				// compare the passed pin, with each user's pin, to get the right user
 				let match = await bcrypt.compare(request.query.pin, entry.pin);
 				if (match) {
-					// in case there is match, retrieve his allowed doors
-					let user = await User.findOne({ _id: entry._id }).populate('allowedDoors');
-					// check the passed doorID with the one in the database
-					let allowed = user.allowedDoors.find((door) => door.doorID == request.query.doorID);
-					if (allowed) {
-						// in case of success
-						response.json('Allowed');
-						await new Record({
-							user: user._id,
-							dateAndTime: dateTime,
-							status: 'Completed',
-							type: `Successful Access through the access point ${allowed.doorName}`
-						}).save();
-					} else {
-						// in case of failure
-						response.json('Not Allowed');
-						await new Record({
-							user: user._id,
-							dateAndTime: dateTime,
-							status: 'Completed',
-							type: `Failed access through the access point ${request.query.doorID}`
-						}).save();
+					if (entry.status == 'Unlocked') {
+						// in case there is match, retrieve his allowed doors
+						let user = await User.findOne({ _id: entry._id }).populate('allowedDoors');
+						// check the passed doorID with the one in the database
+						let allowed = user.allowedDoors.find((door) => door.doorID == request.query.doorID);
+						if (allowed) {
+							// in case of success
+							response.json('Allowed');
+							await new Record({
+								user: user._id,
+								dateAndTime: dateTime,
+								status: 'Completed',
+								type: `Successful Access through the access point ${allowed.doorName}`
+							}).save();
+						} else {
+							// in case of failure
+							response.json('Not Allowed');
+							await new Record({
+								user: user._id,
+								dateAndTime: dateTime,
+								status: 'Completed',
+								type: `Failed access through the access point ${request.query.doorID}`
+							}).save();
+						}
 					}
+				} else {
+					response.json('Account is Locked');
 				}
 			});
 		}
