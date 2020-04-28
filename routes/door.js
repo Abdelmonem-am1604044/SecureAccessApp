@@ -47,7 +47,9 @@ router.get('/:id', async (req, res) => {
 
 // function to update the information of a specific access point, and add new record
 router.post('/:id', async (req, res) => {
-	let door = await Door.findOneAndUpdate({ _id: req.params.id }, req.body);
+	let sensitive = req.body.sensitive ? true : false;
+	let { doorName, doorID } = req.body;
+	let door = await Door.findOneAndUpdate({ _id: req.params.id }, { doorName, doorID, sensitive });
 	await new Record({
 		user: req.user._id,
 		dateAndTime: dateTime,

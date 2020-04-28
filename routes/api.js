@@ -54,6 +54,7 @@ router.get('/confirm', async (request, response) => {
 	if (door) {
 		// identify the the number of inputs required
 		inputs = door.sensitive ? 2 : 1;
+		console.log(inputs);
 	} else {
 		// door does not exist in the database
 		response.json('Door with such ID does not exist');
@@ -190,9 +191,11 @@ router.get('/confirm', async (request, response) => {
 								type: `Failed access through the access point ${request.query.doorID}`
 							}).save();
 						}
+					} else {
+						response.json('Account is Locked');
 					}
 				} else {
-					response.json('Account is Locked');
+					response.json('Pin and/or RFID are incorrect');
 				}
 			});
 		}

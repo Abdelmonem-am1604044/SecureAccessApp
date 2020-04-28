@@ -78,7 +78,7 @@ router.get('/:id', async (req, res) => {
 
 // function to handle the route to update a specific user
 router.post('/:id', async (req, res) => {
-	let { username, role, status } = req.body;
+	let { username, role, status, RFID } = req.body;
 	let doors = req.body.doorName;
 	let allowedDoors = [];
 	if (typeof doors == 'string') {
@@ -89,7 +89,7 @@ router.post('/:id', async (req, res) => {
 			allowedDoors.push(door);
 		});
 	}
-	let user = await User.findOneAndUpdate({ _id: req.params.id }, { username, role, status, allowedDoors });
+	let user = await User.findOneAndUpdate({ _id: req.params.id }, { username, role, status, allowedDoors, RFID });
 	await new Record({
 		user: user._id,
 		dateAndTime: dateTime,
