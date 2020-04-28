@@ -163,7 +163,7 @@ router.get('/confirm', async (request, response) => {
 			// retrieve all of the users from the database
 			let users = await User.find();
 			// loop across all of the users
-			users.forEach(async (entry) => {
+			users.forEach(async (entry, index) => {
 				// compare the passed pin, with each user's pin, to get the right user
 				let match = await bcrypt.compare(request.query.pin, entry.pin);
 				if (match) {
@@ -194,7 +194,8 @@ router.get('/confirm', async (request, response) => {
 					} else {
 						response.json('Account is Locked');
 					}
-				} else {
+				}
+				if (index == users.length - 1) {
 					response.json('Pin and/or RFID are incorrect');
 				}
 			});
